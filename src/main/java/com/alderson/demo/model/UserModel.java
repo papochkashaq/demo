@@ -1,0 +1,56 @@
+package com.alderson.demo.model;
+
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.UUID;
+
+public class UserModel implements Model {
+
+    public Timestamp updatedAt;
+
+    private String name;
+    private String email;
+    private LocalDate dateOfBirth;
+    private Timestamp createdAt;
+
+    public UserModel(String name, String email, String dateOfBirth) {
+        this.name = name;
+        this.email = email;
+        this.dateOfBirth = LocalDate.parse(dateOfBirth);
+        this.createdAt = Timestamp.valueOf(LocalDateTime.now());
+    }
+
+    public UserModel(String name, String email, LocalDate dateOfBirth, Timestamp createdAt, Timestamp updatedAt) {
+        this.updatedAt = updatedAt;
+        this.name = name;
+        this.email = email;
+        this.dateOfBirth = dateOfBirth;
+        this.createdAt = createdAt;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public Timestamp getCreatedAt() {
+        return createdAt;
+    }
+
+    public Timestamp getUpdatedAt() {
+        return updatedAt;
+    }
+
+
+    private boolean validateEmail(String email) {
+        return email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$");
+    }
+}

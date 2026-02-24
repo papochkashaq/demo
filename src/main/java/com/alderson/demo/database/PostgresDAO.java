@@ -1,0 +1,127 @@
+package com.alderson.demo.database;
+
+import java.sql.Date;
+import java.sql.DriverManager;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.Arrays;
+
+import com.alderson.demo.model.UserModel;
+
+public class PostgresDAO {
+
+    private static final String DB_URL = "jdbc:postgresql://localhost:5432/postgres?user=postgres&password=0451";
+
+    public static boolean initUsersTable() {
+        try (Connection connection = DriverManager.getConnection(DB_URL)) {
+            Statement st = connection.createStatement();
+            st.execute("CREATE TABLE users (" +
+                    "  id SERIAL PRIMARY KEY," +
+                    "  name VARCHAR(128)," +
+                    "  email VARCHAR(128)," +
+                    "  dateOfBirth DATE," +
+                    "  createdAt TIMESTAMP," +
+                    "  updatedAt TIMESTAMP" +
+                    ");");
+        } catch (SQLException e) {
+            System.out.println("Error connecting to database " + Arrays.toString(e.getStackTrace()));
+            return false;
+        }
+        return true;
+    }
+
+    public static boolean insertUser(UserModel userModel) {
+        try (Connection connection = DriverManager.getConnection(DB_URL)) {
+            Timestamp now = Timestamp.valueOf(LocalDateTime.now());
+            PreparedStatement insertStmt = connection.prepareStatement("INSERT INTO users(name, email, dateOfBirth, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?)");
+            insertStmt.setString(1, userModel.getName());
+            insertStmt.setString(2, userModel.getEmail());
+            insertStmt.setDate(3, Date.valueOf(userModel.getDateOfBirth()));
+            insertStmt.setTimestamp(4, now);
+            insertStmt.setTimestamp(5, now);
+            insertStmt.execute();
+        } catch (SQLException e) {
+            System.out.println("Error insert user to database " + Arrays.toString(e.getStackTrace()));
+            return false;
+        }
+        return true;
+    }
+
+    public static ResultSet getAllUsers() throws SQLException {
+        try (Connection connection = DriverManager.getConnection(DB_URL)) {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "SELECT name, email, dateOfBirth, createdAt, updatedAt FROM users");
+            ResultSet rs = stmt.executeQuery();
+            return rs;
+        }
+    }
+
+    public static ResultSet getAllUsersNames() throws SQLException {
+        try (Connection connection = DriverManager.getConnection(DB_URL)) {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "SELECT name FROM users");
+            ResultSet rs = stmt.executeQuery();
+            return rs;
+        }
+    }
+
+    public static ResultSet getAllId() throws SQLException {
+        try (Connection connection = DriverManager.getConnection(DB_URL)) {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "SELECT id FROM users");
+            ResultSet rs = stmt.executeQuery();
+            return rs;
+        }
+    }
+    public static void getNames() throws SQLException {
+        try (Connection connection = DriverManager.getConnection(DB_URL)) {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "SELECT name, id FROM users");
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                System.out.println(rs.getString("name") + " " + rs.getString("id"));
+            }
+        }
+    }
+
+    public static ResultSet getAll() throws SQLException {
+        try (Connection connection = DriverManager.getConnection(DB_URL)) {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "SELECT * FROM users");
+            ResultSet rs = stmt.executeQuery();
+            return rs;
+        }
+    }
+
+    public static boolean clearTable(String table) {
+        try (Connection connection = DriverManager.getConnection(DB_URL)) {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "TRUNCATE TABLE " + table);
+            stmt.execute();
+        } catch (SQLException e) {
+            System.out.println("Error to truncate table " + Arrays.toString(e.getStackTrace()));
+            return false;
+        }
+        return true;
+    }
+
+
+
+    public static void main(String[] args) throws SQLException {
+        UserModel user = new UserModel("Taras", "tar@gmail.com", "2002-12-30");
+        System.out.println(insertUser(user));
+        ResultSet rs = getAllUsersNames();
+        while (rs.next()) {
+            System.out.println(rs.getString("name"));
+        }
+        rs = getAllId();
+        while (rs.next()) {
+            System.out.println(rs.getString("id"));
+        }
+    }
+}
