@@ -61,43 +61,6 @@ public class PostgresDAO {
         }
     }
 
-    public static ResultSet getAllUsersNames() throws SQLException {
-        try (Connection connection = DriverManager.getConnection(DB_URL)) {
-            PreparedStatement stmt = connection.prepareStatement(
-                    "SELECT name FROM users");
-            ResultSet rs = stmt.executeQuery();
-            return rs;
-        }
-    }
-
-    public static ResultSet getAllId() throws SQLException {
-        try (Connection connection = DriverManager.getConnection(DB_URL)) {
-            PreparedStatement stmt = connection.prepareStatement(
-                    "SELECT id FROM users");
-            ResultSet rs = stmt.executeQuery();
-            return rs;
-        }
-    }
-    public static void getNames() throws SQLException {
-        try (Connection connection = DriverManager.getConnection(DB_URL)) {
-            PreparedStatement stmt = connection.prepareStatement(
-                    "SELECT name, id FROM users");
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                System.out.println(rs.getString("name") + " " + rs.getString("id"));
-            }
-        }
-    }
-
-    public static ResultSet getAll() throws SQLException {
-        try (Connection connection = DriverManager.getConnection(DB_URL)) {
-            PreparedStatement stmt = connection.prepareStatement(
-                    "SELECT * FROM users");
-            ResultSet rs = stmt.executeQuery();
-            return rs;
-        }
-    }
-
     public static boolean clearTable(String table) {
         try (Connection connection = DriverManager.getConnection(DB_URL)) {
             PreparedStatement stmt = connection.prepareStatement(
@@ -108,20 +71,5 @@ public class PostgresDAO {
             return false;
         }
         return true;
-    }
-
-
-
-    public static void main(String[] args) throws SQLException {
-        UserModel user = new UserModel("Taras", "tar@gmail.com", "2002-12-30");
-        System.out.println(insertUser(user));
-        ResultSet rs = getAllUsersNames();
-        while (rs.next()) {
-            System.out.println(rs.getString("name"));
-        }
-        rs = getAllId();
-        while (rs.next()) {
-            System.out.println(rs.getString("id"));
-        }
     }
 }
