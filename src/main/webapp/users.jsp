@@ -2,10 +2,14 @@
 <%@ page import="java.util.List" %>
 <%@ page import="com.alderson.demo.model.UserModel" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-    <%
-        List<UserModel> usersList = UsersController.controller.getAllUsersByMockList();
+    <%  try {
+    Class.forName("org.postgresql.Driver");
+    } catch (ClassNotFoundException e) {
+    e.printStackTrace();
+    }
+        List<UserModel> usersList = UsersController.controller.getAllUsersFromDB();
     %>
-      <!--<link rel="stylesheet" href="./style.css">-->
+      <link rel="stylesheet" href="./style.css">
 <!DOCTYPE html>
 
 <html>
