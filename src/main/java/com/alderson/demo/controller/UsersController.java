@@ -66,7 +66,7 @@ public class UsersController implements Controller {
         List<UserModel> usersList = new ArrayList<>();
         ResultSet rs = PostgresDAO.getAllUsers();
         while (rs.next()) {
-            usersList.add(new UserModel(rs.getString("name"), rs.getString("email"), LocalDate.parse((CharSequence) rs.getDate("dateOfBirth")), rs.getTimestamp("createdAt"), rs.getTimestamp("updatedAt")));
+            usersList.add(new UserModel(rs.getString("name"), rs.getString("email"), rs.getDate("dateOfBirth").toLocalDate(), rs.getTimestamp("createdAt"), rs.getTimestamp("updatedAt")));
         }
         return usersList;
     }
