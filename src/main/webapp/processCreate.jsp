@@ -2,7 +2,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Test</title>
+    <title>Create user</title>
 </head>
 <body>
 <div class="container">
@@ -10,8 +10,12 @@
         String name = request.getParameter("name");
         String dateOfBirth = request.getParameter("dateOfBirth");
         String email = request.getParameter("email");
-        UsersController.controller.addUser(name, email, dateOfBirth);
-        response.sendRedirect("/users");
+        if (UsersController.controller.addUser(name, email, dateOfBirth)) {
+            response.sendRedirect("/users");
+        } else { %>
+    <p>This email is already taken. Please enter another email.</p>
+    <p><a href="/create">Return to the create user page.</a></p>
+    <%  }
     %>
 </div>
 </body>

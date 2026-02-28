@@ -19,4 +19,12 @@
         <servlet-name>create</servlet-name>
         <url-pattern>/create</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>processCreate</servlet-name>
+        <jsp-file>/processCreate.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>processCreate</servlet-name>
+        <url-pattern>/processCreate</url-pattern>
+    </servlet-mapping>
 </web-app>

@@ -3,7 +3,6 @@ package com.alderson.demo.model;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 public class UserModel implements Model {
 

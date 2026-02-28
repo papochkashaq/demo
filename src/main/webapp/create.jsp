@@ -8,7 +8,7 @@
   <p>Name<input type="text" name="name" required></p>
   <p>Email<input type="email" name="email" required></p>
   <p>Date of birth<input type="date" name="dateOfBirth"></p>
-  <p><input type="submit" value="Create"></p>
+  <p><input type="submit" value="Create user"></p>
 </form>
 </body>
 </html>

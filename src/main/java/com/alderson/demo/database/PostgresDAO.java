@@ -85,4 +85,15 @@ public class PostgresDAO {
         }
         return true;
     }
+
+    public static boolean isEmailFree(String email) throws SQLException {
+        PreparedStatement stmt = connection.prepareStatement(
+                "SELECT email FROM users WHERE email = ?");
+        stmt.setString(1, email);
+        ResultSet rs = stmt.executeQuery();
+        if (rs == null || !rs.next()) {
+            return true;
+        }
+        else return false;
+    }
 }

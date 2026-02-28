@@ -21,8 +21,13 @@ public class UsersController implements Controller {
         return usersList;
     }
 
-    public void addUser(String name, String email, String dateOfBirth) {
-        PostgresDAO.insertUser(new UserModel(name, email, dateOfBirth));
+    public boolean addUser(String name, String email, String dateOfBirth) throws SQLException {
+       if (PostgresDAO.isEmailFree(email)) {
+           PostgresDAO.insertUser(new UserModel(name, email, dateOfBirth));
+           return true;
+       }
+       else
+           return false;
     }
 
     public static UsersController getInstance() {
