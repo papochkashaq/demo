@@ -20,6 +20,12 @@ public class PostgresDAO {
 
     static {
         try {
+            Class.forName("org.postgresql.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        try {
             connection = DriverManager.getConnection(DB_URL);
         } catch (SQLException e) {
             e.printStackTrace();
