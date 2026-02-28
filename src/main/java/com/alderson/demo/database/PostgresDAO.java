@@ -16,9 +16,18 @@ import com.alderson.demo.model.UserModel;
 public class PostgresDAO {
 
     private static final String DB_URL = "jdbc:postgresql://localhost:5432/postgres?user=postgres&password=0451";
+    private static Connection connection;
+
+    static {
+        try {
+            connection = DriverManager.getConnection(DB_URL);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     public static boolean initUsersTable() {
-        try (Connection connection = DriverManager.getConnection(DB_URL)) {
+        try {
             Statement st = connection.createStatement();
             st.execute("CREATE TABLE users (" +
                     "  id SERIAL PRIMARY KEY," +
@@ -36,7 +45,7 @@ public class PostgresDAO {
     }
 
     public static boolean insertUser(UserModel userModel) {
-        try (Connection connection = DriverManager.getConnection(DB_URL)) {
+        try {
             Timestamp now = Timestamp.valueOf(LocalDateTime.now());
             PreparedStatement insertStmt = connection.prepareStatement("INSERT INTO users(name, email, dateOfBirth, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?)");
             insertStmt.setString(1, userModel.getName());
@@ -53,16 +62,14 @@ public class PostgresDAO {
     }
 
     public static ResultSet getAllUsers() throws SQLException {
-        try (Connection connection = DriverManager.getConnection(DB_URL)) {
             PreparedStatement stmt = connection.prepareStatement(
                     "SELECT name, email, dateOfBirth, createdAt, updatedAt FROM users");
             ResultSet rs = stmt.executeQuery();
             return rs;
-        }
     }
 
     public static boolean clearTable(String table) {
-        try (Connection connection = DriverManager.getConnection(DB_URL)) {
+        try {
             PreparedStatement stmt = connection.prepareStatement(
                     "TRUNCATE TABLE " + table);
             stmt.execute();
