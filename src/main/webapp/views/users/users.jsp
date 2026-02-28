@@ -9,7 +9,7 @@
     }
         List<UserModel> usersList = UsersController.controller.getAllUsersFromDB();
     %>
-      <link rel="stylesheet" href="./style.css">
+      <link rel="stylesheet" href="../../../resources/style.css">
 <!DOCTYPE html>
 
 <html>
@@ -40,5 +40,6 @@
       <% } %>
     </tbody>
   </table>
+<p><a href="/">Return to the main page.</a></p>
 </body>
 </html>

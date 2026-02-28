@@ -15,6 +15,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Properties;
+import java.util.Scanner;
 
 import com.alderson.demo.model.UserModel;
 
@@ -45,24 +46,6 @@ public class PostgresDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
-
-    public static boolean initUsersTable() {
-        try {
-            Statement st = connection.createStatement();
-            st.execute("CREATE TABLE users (" +
-                    "  id SERIAL PRIMARY KEY," +
-                    "  name VARCHAR(128)," +
-                    "  email VARCHAR(128)," +
-                    "  dateOfBirth DATE," +
-                    "  createdAt TIMESTAMP," +
-                    "  updatedAt TIMESTAMP" +
-                    ");");
-        } catch (SQLException e) {
-            System.out.println("Error connecting to database " + Arrays.toString(e.getStackTrace()));
-            return false;
-        }
-        return true;
     }
 
     public static boolean insertUser(UserModel userModel) {
@@ -110,5 +93,18 @@ public class PostgresDAO {
             return true;
         }
         else return false;
+    }
+
+    public static void initDB() {
+        Scanner scanner = new Scanner(PostgresDAO.class.getClassLoader().getResourceAsStream("schema.sql"));
+        try {
+            Statement statement = connection.createStatement();
+            while (scanner.hasNextLine()) {
+                statement.execute(scanner.nextLine());
+            }
+        } catch (SQLException e) {
+            System.out.println("Error to init DB " + Arrays.toString(e.getStackTrace()));
+        }
+
     }
 }

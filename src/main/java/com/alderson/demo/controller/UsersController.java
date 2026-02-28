@@ -40,4 +40,8 @@ public class UsersController implements Controller {
         }
         return controller;
     }
+
+    public void run() {
+        PostgresDAO.initDB();
+    }
 }

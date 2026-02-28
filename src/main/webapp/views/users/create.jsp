@@ -4,7 +4,7 @@
     <title>Title</title>
 </head>
 <body>
-<form method="POST" action="processCreate.jsp">
+<form method="POST" action="/processCreate">
   <p>Name<input type="text" name="name" required></p>
   <p>Email<input type="email" name="email" required></p>
   <p>Date of birth<input type="date" name="dateOfBirth"></p>

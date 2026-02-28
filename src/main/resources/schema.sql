@@ -1,0 +1,1 @@
+CREATE TABLE users (id SERIAL PRIMARY KEY,name VARCHAR(128), email VARCHAR(128), dateOfBirth DATE, createdAt TIMESTAMP, updatedAt TIMESTAMP);
