@@ -1,5 +1,9 @@
 package com.alderson.demo.database;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.Connection;
@@ -10,15 +14,26 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Properties;
 
 import com.alderson.demo.model.UserModel;
 
 public class PostgresDAO {
 
-    private static final String DB_URL = "jdbc:postgresql://localhost:5432/postgres?user=postgres&password=0451";
     private static Connection connection;
+    private static final Properties props = new Properties();
 
     static {
+        try (InputStream in = PostgresDAO.class.getClassLoader().getResourceAsStream("db.properties");) {
+            props.load(in);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        final String URL = props.getProperty("db.url");
+        final String USERNAME = props.getProperty("db.username");
+        final String PASSWORD = props.getProperty("db.password");
+
         try {
             Class.forName("org.postgresql.Driver");
         } catch (ClassNotFoundException e) {
@@ -26,7 +41,7 @@ public class PostgresDAO {
         }
 
         try {
-            connection = DriverManager.getConnection(DB_URL);
+            connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
         } catch (SQLException e) {
             e.printStackTrace();
         }
