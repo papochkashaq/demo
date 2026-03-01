@@ -15,7 +15,7 @@
         } else { %>
     <p>This email is already taken. Please enter another email.</p>
     <p><a href="/users/create">Return to the create user page.</a></p>
-    <%  }
+    <% }
     %>
 </div>
 </body>

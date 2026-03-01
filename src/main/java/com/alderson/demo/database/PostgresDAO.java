@@ -1,7 +1,5 @@
 package com.alderson.demo.database;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Date;
@@ -22,18 +20,18 @@ import com.alderson.demo.model.UserModel;
 public class PostgresDAO {
 
     private static Connection connection;
-    private static final Properties props = new Properties();
+    private static final Properties PROPERTIES = new Properties();
 
     static {
         try (InputStream in = PostgresDAO.class.getClassLoader().getResourceAsStream("db.properties");) {
-            props.load(in);
+            PROPERTIES.load(in);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        final String URL = props.getProperty("db.url");
-        final String USERNAME = props.getProperty("db.username");
-        final String PASSWORD = props.getProperty("db.password");
+        final String URL = PROPERTIES.getProperty("db.url");
+        final String USERNAME = PROPERTIES.getProperty("db.username");
+        final String PASSWORD = PROPERTIES.getProperty("db.password");
 
         try {
             Class.forName("org.postgresql.Driver");
@@ -48,10 +46,24 @@ public class PostgresDAO {
         }
     }
 
+    public static void initDB() {
+        Scanner scanner = new Scanner(PostgresDAO.class.getClassLoader().getResourceAsStream("schema.sql"));
+        try {
+            Statement stmt = connection.createStatement();
+            while (scanner.hasNextLine()) {
+                stmt.execute(scanner.nextLine());
+            }
+        } catch (SQLException e) {
+            System.out.println("Error to init DB " + Arrays.toString(e.getStackTrace()));
+        }
+
+    }
+
     public static boolean insertUser(UserModel userModel) {
         try {
             Timestamp now = Timestamp.valueOf(LocalDateTime.now());
-            PreparedStatement insertStmt = connection.prepareStatement("INSERT INTO users(name, email, dateOfBirth, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?)");
+            PreparedStatement insertStmt = connection.prepareStatement("INSERT INTO users(name, email, dateOfBirth, " +
+                    "createdAt, updatedAt) VALUES (?, ?, ?, ?, ?)");
             insertStmt.setString(1, userModel.getName());
             insertStmt.setString(2, userModel.getEmail());
             insertStmt.setDate(3, Date.valueOf(userModel.getDateOfBirth()));
@@ -66,22 +78,10 @@ public class PostgresDAO {
     }
 
     public static ResultSet getAllUsers() throws SQLException {
-            PreparedStatement stmt = connection.prepareStatement(
-                    "SELECT name, email, dateOfBirth, createdAt, updatedAt FROM users");
-            ResultSet rs = stmt.executeQuery();
-            return rs;
-    }
-
-    public static boolean clearTable(String table) {
-        try {
-            PreparedStatement stmt = connection.prepareStatement(
-                    "TRUNCATE TABLE " + table);
-            stmt.execute();
-        } catch (SQLException e) {
-            System.out.println("Error to truncate table " + Arrays.toString(e.getStackTrace()));
-            return false;
-        }
-        return true;
+        PreparedStatement stmt = connection.prepareStatement(
+                "SELECT name, email, dateOfBirth, createdAt, updatedAt FROM users");
+        ResultSet rs = stmt.executeQuery();
+        return rs;
     }
 
     public static boolean isEmailFree(String email) throws SQLException {
@@ -91,20 +91,9 @@ public class PostgresDAO {
         ResultSet rs = stmt.executeQuery();
         if (rs == null || !rs.next()) {
             return true;
+        } else {
+            return false;
         }
-        else return false;
     }
 
-    public static void initDB() {
-        Scanner scanner = new Scanner(PostgresDAO.class.getClassLoader().getResourceAsStream("schema.sql"));
-        try {
-            Statement statement = connection.createStatement();
-            while (scanner.hasNextLine()) {
-                statement.execute(scanner.nextLine());
-            }
-        } catch (SQLException e) {
-            System.out.println("Error to init DB " + Arrays.toString(e.getStackTrace()));
-        }
-
-    }
 }
