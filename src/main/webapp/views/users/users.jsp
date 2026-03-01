@@ -9,7 +9,7 @@
     }
         List<UserModel> usersList = UsersController.controller.getAllUsersFromDB();
     %>
-      <link rel="stylesheet" href="../../../resources/style.css">
+      <link rel="stylesheet" href="../../resources/style.css"/>
 <!DOCTYPE html>
 
 <html>
