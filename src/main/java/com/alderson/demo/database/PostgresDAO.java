@@ -62,6 +62,7 @@ public class PostgresDAO {
     }
 
     public static boolean insertUser(UserModel userModel) {
+        // use try-with-resources for PreparedStatement to ensure it is closed properly
         try {
             Timestamp now = Timestamp.valueOf(LocalDateTime.now());
             PreparedStatement insertStmt = connection.prepareStatement("INSERT INTO users(name, email, dateOfBirth, " +
@@ -81,6 +82,7 @@ public class PostgresDAO {
     }
 
     public static ResultSet getAllUsers() throws SQLException {
+        // PreparedStatement and ResultSet are not closed. Use try-with-resources or close them manually. Returning a ResultSet to the controller/view is a leak.
         PreparedStatement stmt = connection.prepareStatement(
                 "SELECT name, email, dateOfBirth, createdAt, updatedAt FROM users");
         ResultSet rs = stmt.executeQuery();
@@ -88,6 +90,7 @@ public class PostgresDAO {
     }
 
     public static boolean isEmailFree(String email) throws SQLException {
+        // use try-with-resources for PreparedStatement and ResultSet
         PreparedStatement stmt = connection.prepareStatement(
                 "SELECT email FROM users WHERE email = ?");
         stmt.setString(1, email);

@@ -7,6 +7,7 @@
 <body>
 <div class="container">
     <%
+        // This JSP acts like a Controller. Instead of using JSP, use a Servlet to process the POST request and handle redirects.
         String name = request.getParameter("name");
         String dateOfBirth = request.getParameter("dateOfBirth");
         String email = request.getParameter("email");

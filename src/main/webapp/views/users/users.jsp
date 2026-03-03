@@ -2,11 +2,13 @@
 <%@ page import="java.util.List" %>
 <%@ page import="com.alderson.demo.model.UserModel" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%-- Calling Class.forName in JSP is inefficient and shouldn't be here. Database initialization belongs in a ServletContextListener. --%>
 <% try {
     Class.forName("org.postgresql.Driver");
-} catch (ClassNotFoundException e) {
+    } catch (ClassNotFoundException e) {
     e.printStackTrace();
 }
+    // Fetching data directly from controller in JSP bypasses MVC. Use a Servlet to set the data as an attribute.
     List<UserModel> usersList = UsersController.controller.getAllUsersFromDB();
 %>
 <link rel="stylesheet" href="../../resources/style.css" />

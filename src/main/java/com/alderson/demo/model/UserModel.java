@@ -14,6 +14,7 @@ public class UserModel implements Model {
     private Timestamp createdAt;
 
     public UserModel(String name, String email, String dateOfBirth) {
+        // LocalDate.parse will throw an exception if dateOfBirth is not in ISO format. Should handle DateTimeParseException.
         this.name = name;
         this.email = email;
         this.dateOfBirth = LocalDate.parse(dateOfBirth);
