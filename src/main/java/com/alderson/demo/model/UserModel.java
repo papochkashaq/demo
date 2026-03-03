@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class UserModel implements Model {
-
+    // looks like class for service layer, where is dto for controller?
     public Timestamp updatedAt;
 
     private String name;

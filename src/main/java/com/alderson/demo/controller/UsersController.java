@@ -14,6 +14,7 @@ public class UsersController implements Controller {
 
     public void run() {
         PostgresDAO.initDB();
+        // single responsibility problem, class runs the whole application, inits himself and db, separate logic and app lifesycle
     }
 
     public List<UserModel> getAllUsersFromDB() throws SQLException {

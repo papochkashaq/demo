@@ -18,6 +18,7 @@ import java.util.Scanner;
 import com.alderson.demo.model.UserModel;
 
 public class PostgresDAO {
+    //where is pojo for entity layer?
 
     private static Connection connection;
     private static final Properties PROPERTIES = new Properties();
@@ -47,6 +48,7 @@ public class PostgresDAO {
     }
 
     public static void initDB() {
+        // single responsibility problem, class inits db and accesses it, separate data access part and db initiation
         Scanner scanner = new Scanner(PostgresDAO.class.getClassLoader().getResourceAsStream("schema.sql"));
         try {
             Statement stmt = connection.createStatement();
@@ -75,6 +77,7 @@ public class PostgresDAO {
             return false;
         }
         return true;
+        // doesn't execute call return boolean?
     }
 
     public static ResultSet getAllUsers() throws SQLException {
@@ -90,6 +93,7 @@ public class PostgresDAO {
         stmt.setString(1, email);
         ResultSet rs = stmt.executeQuery();
         if (rs == null || !rs.next()) {
+            // do we need those returns here?
             return true;
         } else {
             return false;
