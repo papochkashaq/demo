@@ -61,12 +61,11 @@ public class PostgresDAO {
 
     }
 
-    public static boolean insertUser(UserModel userModel) {
+    public static void insertUser(UserModel userModel) {
         // use try-with-resources for PreparedStatement to ensure it is closed properly
-        try {
-            Timestamp now = Timestamp.valueOf(LocalDateTime.now());
-            PreparedStatement insertStmt = connection.prepareStatement("INSERT INTO users(name, email, dateOfBirth, " +
-                    "createdAt, updatedAt) VALUES (?, ?, ?, ?, ?)");
+        Timestamp now = Timestamp.valueOf(LocalDateTime.now());
+        try (PreparedStatement insertStmt = connection.prepareStatement("INSERT INTO users(name, email, dateOfBirth, "
+                + "createdAt, updatedAt) VALUES (?, ?, ?, ?, ?)");) {
             insertStmt.setString(1, userModel.getName());
             insertStmt.setString(2, userModel.getEmail());
             insertStmt.setDate(3, Date.valueOf(userModel.getDateOfBirth()));
@@ -75,24 +74,25 @@ public class PostgresDAO {
             insertStmt.execute();
         } catch (SQLException e) {
             System.out.println("Error insert user to database " + Arrays.toString(e.getStackTrace()));
-            return false;
         }
-        return true;
         // doesn't execute call return boolean?
     }
 
     public static ResultSet getAllUsers() throws SQLException {
-        // PreparedStatement and ResultSet are not closed. Use try-with-resources or close them manually. Returning a ResultSet to the controller/view is a leak.
-        PreparedStatement stmt = connection.prepareStatement(
-                "SELECT name, email, dateOfBirth, createdAt, updatedAt FROM users");
+        // PreparedStatement and ResultSet are not closed. Use try-with-resources or close them manually. Returning a
+        // ResultSet to the controller/view is a leak.
+        ResultSet rs;
+        try (PreparedStatement stmt = connection.prepareStatement) {
+            ("SELECT name, email, dateOfBirth, createdAt, updatedAt FROM users");
+        }
         ResultSet rs = stmt.executeQuery();
         return rs;
     }
 
-    public static boolean isEmailFree(String email) throws SQLException {
+    public static void isEmailFree(String email) throws SQLException {
         // use try-with-resources for PreparedStatement and ResultSet
-        PreparedStatement stmt = connection.prepareStatement(
-                "SELECT email FROM users WHERE email = ?");
+        ResultSet rs;
+        try (PreparedStatement stmt = connection.prepareStatement("SELECT email FROM users WHERE email = ?")) {
         stmt.setString(1, email);
         ResultSet rs = stmt.executeQuery();
         if (rs == null || !rs.next()) {

@@ -4,16 +4,15 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-public class UserModel implements Model {
+public class UserDTO implements Model {
     // looks like class for service layer, where is dto for controller?
-    public Timestamp updatedAt;
-
     private String name;
     private String email;
     private LocalDate dateOfBirth;
     private Timestamp createdAt;
+    private Timestamp updatedAt;
 
-    public UserModel(String name, String email, String dateOfBirth) {
+    public UserDTO(String name, String email, String dateOfBirth) {
         // LocalDate.parse will throw an exception if dateOfBirth is not in ISO format. Should handle DateTimeParseException.
         this.name = name;
         this.email = email;
@@ -21,7 +20,7 @@ public class UserModel implements Model {
         this.createdAt = Timestamp.valueOf(LocalDateTime.now());
     }
 
-    public UserModel(String name, String email, LocalDate dateOfBirth, Timestamp createdAt, Timestamp updatedAt) {
+    public UserDTO(String name, String email, LocalDate dateOfBirth, Timestamp createdAt, Timestamp updatedAt) {
         this.updatedAt = updatedAt;
         this.name = name;
         this.email = email;
