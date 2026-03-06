@@ -1,39 +1,54 @@
 package com.alderson.demo.controller;
 
-import java.sql.ResultSet;
+import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
-import com.alderson.demo.database.PostgresDAO;
-import com.alderson.demo.model.UserModel;
+import com.alderson.demo.database.Postgres;
+import com.alderson.demo.model.UserDAO;
+import com.alderson.demo.model.UserDTO;
+import com.alderson.demo.model.UserService;
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
-public class UsersController implements Controller {
+public class UsersController extends HttpServlet implements Controller {
 
     public static UsersController controller = UsersController.getInstance();
     // Static initialization of the controller can lead to issues with class loading order. Use it only where needed.
 
+    private UserService userService = new UserService(new UserDAO(Postgres.getConnection()));
+
+
     public void run() {
-        PostgresDAO.initDB();
-        // single responsibility problem, class runs the whole application, inits himself and db, separate logic and app lifesycle
-        // This method is never called in the servlet/JSP context. Consider using a ServletContextListener to initialize the DB.
+        Postgres.main();
+        // single responsibility problem, class runs the whole application, inits himself and db, separate logic and
+        // app lifesycle
+        // This method is never called in the servlet/JSP context. Consider using a ServletContextListener to
+        // initialize the DB.
     }
 
-    public List<UserModel> getAllUsersFromDB() throws SQLException {
-        List<UserModel> usersList = new ArrayList<>();
-        ResultSet rs = PostgresDAO.getAllUsers();
-        while (rs.next()) {
-            usersList.add(new UserModel(rs.getString("name"), rs.getString("email"),
-                    rs.getDate("dateOfBirth").toLocalDate(), rs.getTimestamp("createdAt"), rs.getTimestamp("updatedAt"
-            )));
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException,
+            IOException {
+        List<UserDTO> users = null;
+        try {
+            users = userService.getAllUsers();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        return usersList;
+        request.setAttribute("users", users);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/users/users.jsp");
+        dispatcher.forward(request, response);
     }
+
 
     public boolean addUser(String name, String email, String dateOfBirth) throws SQLException {
-        // No validation for parameters (name, email, dateOfBirth). Should handle potential nulls or empty strings before processing.
-        if (PostgresDAO.isEmailFree(email)) {
-            PostgresDAO.insertUser(new UserModel(name, email, dateOfBirth));
+        // No validation for parameters (name, email, dateOfBirth). Should handle potential nulls or empty strings
+        // before processing.
+        if (UserDAO.isEmailFree(email)) {
+            UserDAO.insertUser(new UserDTO(name, email, dateOfBirth));
             return true;
         } else {
             return false;

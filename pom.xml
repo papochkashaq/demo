@@ -24,6 +24,13 @@
             <version>6.1.0</version>
             <scope>provided</scope>
         </dependency>
+        <!-- Source: https://mvnrepository.com/artifact/jstl/jstl -->
+        <dependency>
+            <groupId>jstl</groupId>
+            <artifactId>jstl</artifactId>
+            <version>1.2</version>
+            <scope>compile</scope>
+        </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
@@ -35,12 +42,6 @@
             <artifactId>junit-jupiter-engine</artifactId>
             <version>${junit.version}</version>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>javax.mail</groupId>
-            <artifactId>javax.mail-api</artifactId>
-            <version>1.6.2</version>
-            <scope>compile</scope>
         </dependency>
         <!-- Source: https://mvnrepository.com/artifact/org.postgresql/postgresql -->
         <dependency>

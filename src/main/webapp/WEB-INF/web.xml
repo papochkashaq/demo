@@ -5,7 +5,7 @@
          version="6.0">
     <servlet>
         <servlet-name>index</servlet-name>
-        <jsp-file>/views/index.jsp</jsp-file>
+        <jsp-file>/WEB-INF/views/index.jsp</jsp-file>
     </servlet>
     <servlet-mapping>
         <servlet-name>index</servlet-name>
@@ -13,7 +13,7 @@
     </servlet-mapping>
     <servlet>
         <servlet-name>users</servlet-name>
-        <jsp-file>/views//users/users.jsp</jsp-file>
+        <servlet-class>com.alderson.demo.controller.UsersController</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>users</servlet-name>
@@ -21,7 +21,7 @@
     </servlet-mapping>
     <servlet>
         <servlet-name>create</servlet-name>
-        <jsp-file>/views/users/create.jsp</jsp-file>
+        <jsp-file>/WEB-INF/views/users/create.jsp</jsp-file>
     </servlet>
     <servlet-mapping>
         <servlet-name>create</servlet-name>
@@ -29,7 +29,7 @@
     </servlet-mapping>
     <servlet>
         <servlet-name>processCreate</servlet-name>
-        <jsp-file>/views/users/processCreate.jsp</jsp-file>
+        <jsp-file>/WEB-INF/views/users/processCreate.jsp</jsp-file>
     </servlet>
     <servlet-mapping>
         <servlet-name>processCreate</servlet-name>
