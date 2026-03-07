@@ -18,24 +18,6 @@ public class UserDAO {
         this.connection = connection;
     }
 
-    public List<UserDTO> getAllUsers() throws SQLException {
-        // PreparedStatement and ResultSet are not closed. Use try-with-resources or close them manually. Returning a
-        // ResultSet to the controller/view is a leak.
-
-        try (PreparedStatement stmt = connection.prepareStatement(
-                "SELECT name, email, dateOfBirth, createdAt, updatedAt FROM users")) {
-            ResultSet rs = stmt.executeQuery();
-            List<UserDTO> usersList = new ArrayList<>();
-            while (rs.next()) {
-                usersList.add(new UserDTO(rs.getString("name"), rs.getString("email"),
-                        rs.getDate("dateOfBirth").toLocalDate(), rs.getTimestamp("createdAt"), rs.getTimestamp(
-                                "updatedAt"
-                )));
-            }
-            return usersList;
-        }
-    }
-
     public static boolean isEmailFree(String email) throws SQLException {
         String sql = "SELECT NOT EXISTS (SELECT 1 FROM users WHERE email = ?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -63,5 +45,23 @@ public class UserDAO {
             System.out.println("Error insert user to database " + Arrays.toString(e.getStackTrace()));
         }
         // doesn't execute call return boolean?
+    }
+
+    public List<UserDTO> getAllUsers() throws SQLException {
+        // PreparedStatement and ResultSet are not closed. Use try-with-resources or close them manually. Returning a
+        // ResultSet to the controller/view is a leak.
+
+        try (PreparedStatement stmt = connection.prepareStatement(
+                "SELECT name, email, dateOfBirth, createdAt, updatedAt FROM users")) {
+            ResultSet rs = stmt.executeQuery();
+            List<UserDTO> usersList = new ArrayList<>();
+            while (rs.next()) {
+                usersList.add(new UserDTO(rs.getString("name"), rs.getString("email"),
+                        rs.getDate("dateOfBirth").toLocalDate(), rs.getTimestamp("createdAt"), rs.getTimestamp(
+                        "updatedAt"
+                )));
+            }
+            return usersList;
+        }
     }
 }

@@ -13,7 +13,8 @@ public class UserDTO implements Model {
     private Timestamp updatedAt;
 
     public UserDTO(String name, String email, String dateOfBirth) {
-        // LocalDate.parse will throw an exception if dateOfBirth is not in ISO format. Should handle DateTimeParseException.
+        // LocalDate.parse will throw an exception if dateOfBirth is not in ISO format. Should handle
+        // DateTimeParseException.
         this.name = name;
         this.email = email;
         this.dateOfBirth = LocalDate.parse(dateOfBirth);

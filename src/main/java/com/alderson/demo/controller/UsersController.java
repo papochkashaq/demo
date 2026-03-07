@@ -16,19 +16,24 @@ import jakarta.servlet.http.HttpServletResponse;
 
 public class UsersController extends HttpServlet implements Controller {
 
-    public static UsersController controller = UsersController.getInstance();
+    private UserService userService = new UserService(new UserDAO(Postgres.getConnection()));    public static UsersController controller = UsersController.getInstance();
     // Static initialization of the controller can lead to issues with class loading order. Use it only where needed.
 
-    private UserService userService = new UserService(new UserDAO(Postgres.getConnection()));
-
-
-    public void run() {
-        Postgres.main();
-        // single responsibility problem, class runs the whole application, inits himself and db, separate logic and
-        // app lifesycle
-        // This method is never called in the servlet/JSP context. Consider using a ServletContextListener to
-        // initialize the DB.
+    public static UsersController getInstance() {
+        if (controller == null) {
+            synchronized (UsersController.class) {
+                if (controller == null) {
+                    controller = new UsersController();
+                }
+            }
+        }
+        return controller;
     }
+
+    // single responsibility problem, class runs the whole application, inits himself and db, separate logic and
+    // app lifesycle
+    // This method is never called in the servlet/JSP context. Consider using a ServletContextListener to
+    // initialize the DB.
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException {
@@ -53,14 +58,11 @@ public class UsersController extends HttpServlet implements Controller {
                 response.sendRedirect("/users");
             } else {
                 response.sendRedirect("/users/email-error");
-               }
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
-
-
-
 
     public boolean addUser(String name, String email, String dateOfBirth) throws SQLException {
         // No validation for parameters (name, email, dateOfBirth). Should handle potential nulls or empty strings
@@ -72,16 +74,4 @@ public class UsersController extends HttpServlet implements Controller {
             return false;
         }
     }
-
-    public static UsersController getInstance() {
-        if (controller == null) {
-            synchronized (UsersController.class) {
-                if (controller == null) {
-                    controller = new UsersController();
-                }
-            }
-        }
-        return controller;
-    }
-
 }

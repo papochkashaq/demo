@@ -2,8 +2,8 @@ package com.alderson.demo.database;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.DriverManager;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Arrays;
@@ -34,7 +34,7 @@ public class Postgres {
     }
 
     private static void loadProperties() {
-        try (InputStream in = Postgres.class.getClassLoader().getResourceAsStream("db.properties");) {
+        try (InputStream in = Postgres.class.getClassLoader().getResourceAsStream("db.properties")) {
             PROPERTIES.load(in);
         } catch (IOException e) {
             e.printStackTrace();
