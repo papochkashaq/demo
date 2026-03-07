@@ -4,7 +4,7 @@
     <title>Create user</title>
 </head>
 <body>
-<form method="POST" action="/processCreate">
+<form method="POST" action="/users">
     <p>Name<input type="text" name="name" required></p>
     <p>Email<input type="email" name="email" required></p>
     <p>Date of birth<input type="date" name="dateOfBirth"></p>

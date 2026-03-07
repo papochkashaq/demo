@@ -21,32 +21,32 @@ public class UserDAO {
     public List<UserDTO> getAllUsers() throws SQLException {
         // PreparedStatement and ResultSet are not closed. Use try-with-resources or close them manually. Returning a
         // ResultSet to the controller/view is a leak.
-        ResultSet rs;
+
         try (PreparedStatement stmt = connection.prepareStatement(
                 "SELECT name, email, dateOfBirth, createdAt, updatedAt FROM users")) {
-            rs = stmt.executeQuery();
+            ResultSet rs = stmt.executeQuery();
+            List<UserDTO> usersList = new ArrayList<>();
+            while (rs.next()) {
+                usersList.add(new UserDTO(rs.getString("name"), rs.getString("email"),
+                        rs.getDate("dateOfBirth").toLocalDate(), rs.getTimestamp("createdAt"), rs.getTimestamp(
+                                "updatedAt"
+                )));
+            }
+            return usersList;
         }
-        List<UserDTO> usersList = new ArrayList<>();
-        while (rs.next()) {
-            usersList.add(new UserDTO(rs.getString("name"), rs.getString("email"),
-                    rs.getDate("dateOfBirth").toLocalDate(), rs.getTimestamp("createdAt"), rs.getTimestamp("updatedAt"
-            )));
-        }
-        return usersList;
     }
 
     public static boolean isEmailFree(String email) throws SQLException {
-        ResultSet rs;
-        try (PreparedStatement stmt = connection.prepareStatement("SELECT email FROM users WHERE email = ?")) {
+        String sql = "SELECT NOT EXISTS (SELECT 1 FROM users WHERE email = ?)";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, email);
-            rs = stmt.executeQuery();
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getBoolean(1);
+                }
+            }
         }
-        if (rs == null || !rs.next()) {
-            // do we need those returns here?
-            return true;
-        } else {
-            return false;
-        }
+        return false;
     }
 
     public static void insertUser(UserDTO userDTO) {

@@ -1,4 +1,3 @@
-<%@ page import="com.alderson.demo.controller.UsersController" %>
 <%@ page import="com.alderson.demo.database.Postgres" %>
 <html>
 <head>

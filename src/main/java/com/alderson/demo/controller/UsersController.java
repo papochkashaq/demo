@@ -43,6 +43,24 @@ public class UsersController extends HttpServlet implements Controller {
         dispatcher.forward(request, response);
     }
 
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException,
+            IOException {
+        String name = request.getParameter("name");
+        String dateOfBirth = request.getParameter("dateOfBirth");
+        String email = request.getParameter("email");
+        try {
+            if (addUser(name, email, dateOfBirth)) {
+                response.sendRedirect("/users");
+            } else {
+                response.sendRedirect("/users/email-error");
+               }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+
 
     public boolean addUser(String name, String email, String dateOfBirth) throws SQLException {
         // No validation for parameters (name, email, dateOfBirth). Should handle potential nulls or empty strings

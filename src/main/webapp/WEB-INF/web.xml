@@ -28,11 +28,11 @@
         <url-pattern>/users/create</url-pattern>
     </servlet-mapping>
     <servlet>
-        <servlet-name>processCreate</servlet-name>
-        <jsp-file>/WEB-INF/views/users/processCreate.jsp</jsp-file>
+        <servlet-name>email-error</servlet-name>
+        <jsp-file>/WEB-INF/views/users/email-error.jsp</jsp-file>
     </servlet>
     <servlet-mapping>
-        <servlet-name>processCreate</servlet-name>
-        <url-pattern>/processCreate</url-pattern>
+        <servlet-name>email-error</servlet-name>
+        <url-pattern>/users/email-error</url-pattern>
     </servlet-mapping>
 </web-app>

@@ -1,15 +1,8 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%-- Calling Class.forName in JSP is inefficient and shouldn't be here. Database initialization belongs in a ServletContextListener. --%>
-<% try {
-    Class.forName("org.postgresql.Driver");
-} catch (ClassNotFoundException e) {
-    e.printStackTrace();
-}
-%>
 <link rel="stylesheet" href="../../resources/style.css" />
 <!DOCTYPE html>
-
 <html>
 <head>
     <title>All users</title>
