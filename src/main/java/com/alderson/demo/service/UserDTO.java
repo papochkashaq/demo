@@ -1,10 +1,10 @@
-package com.alderson.demo.model;
+package com.alderson.demo.service;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-public class UserDTO implements Model {
+public class UserDTO {
     // looks like class for service layer, where is dto for controller?
     private String name;
     private String email;

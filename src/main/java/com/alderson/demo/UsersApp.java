@@ -1,4 +1,4 @@
-package com.alderson.demo.database;
+package com.alderson.demo;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.Properties;
 import java.util.Scanner;
 
-public class Postgres {
+public class UsersApp {
     //where is pojo for entity layer?
 
     private static final Properties PROPERTIES = new Properties();
@@ -34,7 +34,7 @@ public class Postgres {
     }
 
     private static void loadProperties() {
-        try (InputStream in = Postgres.class.getClassLoader().getResourceAsStream("db.properties")) {
+        try (InputStream in = UsersApp.class.getClassLoader().getResourceAsStream("db.properties")) {
             PROPERTIES.load(in);
         } catch (IOException e) {
             e.printStackTrace();
@@ -46,7 +46,7 @@ public class Postgres {
 
     private static void initDB() {
         // single responsibility problem, class inits db and accesses it, separate data access part and db initiation
-        Scanner scanner = new Scanner(Postgres.class.getClassLoader().getResourceAsStream("schema.sql"));
+        Scanner scanner = new Scanner(UsersApp.class.getClassLoader().getResourceAsStream("schema.sql"));
         try {
             Statement stmt = getConnection().createStatement();
             while (scanner.hasNextLine()) {

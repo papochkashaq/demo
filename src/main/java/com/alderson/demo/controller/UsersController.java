@@ -4,31 +4,21 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
-import com.alderson.demo.database.Postgres;
-import com.alderson.demo.model.UserDAO;
-import com.alderson.demo.model.UserDTO;
-import com.alderson.demo.model.UserService;
+import com.alderson.demo.UsersApp;
+import com.alderson.demo.service.UserDAO;
+import com.alderson.demo.service.UserDTO;
+import com.alderson.demo.service.UserService;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-public class UsersController extends HttpServlet implements Controller {
+public class UsersController extends HttpServlet {
 
-    private UserService userService = new UserService(new UserDAO(Postgres.getConnection()));    public static UsersController controller = UsersController.getInstance();
+    private UserService userService = new UserService(new UserDAO(UsersApp.getConnection()));
+    public static UsersController controller = new UsersController();
     // Static initialization of the controller can lead to issues with class loading order. Use it only where needed.
-
-    public static UsersController getInstance() {
-        if (controller == null) {
-            synchronized (UsersController.class) {
-                if (controller == null) {
-                    controller = new UsersController();
-                }
-            }
-        }
-        return controller;
-    }
 
     // single responsibility problem, class runs the whole application, inits himself and db, separate logic and
     // app lifesycle

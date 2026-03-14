@@ -1,4 +1,4 @@
-package com.alderson.demo.model;
+package com.alderson.demo.service;
 
 import java.sql.Connection;
 import java.sql.Date;
