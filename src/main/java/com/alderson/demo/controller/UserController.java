@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,13 +26,13 @@ public class UserController {
     }
 
     @GetMapping
-    public String listUsers(Model model) {
+    public String getAllUsers(Model model) {
         model.addAttribute("usersList", userService.getAllUsers());
         return "users";
     }
 
     @GetMapping("/create")
-    public String create(Model model) {
+    public String showCreateUserForm(Model model) {
         model.addAttribute("user", new User());
         return "create";
     }
@@ -44,6 +45,18 @@ public class UserController {
         } catch (Exception e) {
             return emailError();
         }
+    }
+
+    @GetMapping("/edit/{id}")
+    public String showEditUserForm(@PathVariable Long id, Model model) {
+        User user = userService.findUserById(id);
+        model.addAttribute("user", user);
+        return "edit";
+    }
+
+    @PostMapping("/edit/{id}")
+    public String editUser(@PathVariable Long id, @Valid @ModelAttribute("user") User user) {
+       return addUser(user);
     }
 
     @PostMapping("/delete")
