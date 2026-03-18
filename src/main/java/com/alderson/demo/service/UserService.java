@@ -1,10 +1,10 @@
 package com.alderson.demo.service;
 
 import java.util.List;
+import java.util.UUID;
 
 import com.alderson.demo.model.User;
 import com.alderson.demo.repository.UserRepository;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,8 +24,8 @@ public class UserService {
     }
 
     @Transactional
-    public User findUserById(Long id) {
-        return userRepository.findById(id).get();
+    public User findUserById(UUID id) {
+        return userRepository.findUserById(id);
     }
 
     @Transactional
@@ -34,7 +34,7 @@ public class UserService {
     }
 
     @Transactional
-    public void deleteUser(Long id) {
-        userRepository.deleteById(id);
+    public void deleteUser(UUID id) {
+        userRepository.deleteUserById(id);
     }
 }

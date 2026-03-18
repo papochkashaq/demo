@@ -1,5 +1,7 @@
 package com.alderson.demo.controller;
 
+import java.util.UUID;
+
 import com.alderson.demo.model.User;
 import com.alderson.demo.service.UserService;
 import jakarta.validation.Valid;
@@ -10,7 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -38,29 +39,34 @@ public class UserController {
     }
 
     @PostMapping("/create")
-    public String addUser(@Valid @RequestBody @ModelAttribute("user") User user) {
+    public String addUser(@Valid @ModelAttribute("user") User user) {
         try {
             userService.addUser(user);
             return "redirect:/users";
         } catch (Exception e) {
-            return emailError();
+            return "redirect:/users/email-error";
         }
     }
 
     @GetMapping("/edit/{id}")
-    public String showEditUserForm(@PathVariable Long id, Model model) {
+    public String showEditUserForm(@PathVariable UUID id, Model model) {
         User user = userService.findUserById(id);
         model.addAttribute("user", user);
         return "edit";
     }
 
     @PostMapping("/edit/{id}")
-    public String editUser(@PathVariable Long id, @Valid @ModelAttribute("user") User user) {
-       return addUser(user);
+    public String editUser(@PathVariable UUID id, @Valid @ModelAttribute("user") User user) {
+        try {
+            userService.addUser(user);
+            return "redirect:/users";
+        } catch (Exception e) {
+            return "redirect:/users/email-error";
+        }
     }
 
     @PostMapping("/delete")
-    public String deleteUser(@RequestParam Long id) {
+    public String deleteUser(@RequestParam UUID id) {
         userService.deleteUser(id);
         return "redirect:/users";
     }

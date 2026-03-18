@@ -25,10 +25,7 @@
         <td th:text="${user.createdAt}">Created At</td>
         <td th:text="${user.updatedAt}">Updated At</td>
         <td>
-            <form th:action="@{/users/edit/{id}(id=${user.id})}" method="get">
-                <input type="hidden" name="id" th:value="${user.id}" />
-                <button type="submit">Edit</button>
-            </form>
+            <a th:href="@{/users/edit/{id}(id=${user.id})}" class="button-link">Edit</a>
         </td>
         <td>
             <form th:action="@{/users/delete}" method="post">

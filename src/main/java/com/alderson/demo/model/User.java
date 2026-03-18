@@ -3,6 +3,7 @@ package com.alderson.demo.model;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -25,7 +26,7 @@ import lombok.NoArgsConstructor;
 public class User {
     @Id
     @GeneratedValue
-    private Long id;
+    private UUID id;
     private String name;
     @Column(unique = true)
     @NotBlank(message = "Email can't be blank")
