@@ -1,2 +1,9 @@
-CREATE TABLE users (id SERIAL PRIMARY KEY,name VARCHAR(128), email VARCHAR(128), dateOfBirth DATE, createdAt TIMESTAMP, updatedAt TIMESTAMP);
--- is serial id good choice for user ids? is varchar character restriction valid for postgres?
+CREATE TABLE IF NOT EXISTS users
+(
+    id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    name          TEXT        NOT NULL,
+    email         TEXT UNIQUE NOT NULL,
+    date_of_birth DATE,
+    created_at    TIMESTAMP        DEFAULT NOW(),
+    updated_at    TIMESTAMP        DEFAULT NOW()
+);
