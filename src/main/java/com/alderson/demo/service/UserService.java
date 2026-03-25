@@ -1,16 +1,40 @@
 package com.alderson.demo.service;
 
-import java.sql.SQLException;
 import java.util.List;
+import java.util.UUID;
 
+import com.alderson.demo.model.User;
+import com.alderson.demo.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Service
 public class UserService {
-    private UserDAO userDAO;
+    private final UserRepository userRepository;
 
-    public UserService(UserDAO userDAO) {
-        this.userDAO = userDAO;
+    @Autowired
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
-    public List<UserDTO> getAllUsers() throws SQLException {
-        return userDAO.getAllUsers();
+    @Transactional
+    public void addUser(User user) {
+        userRepository.save(user);
+    }
+
+    @Transactional
+    public User findUserById(UUID id) {
+        return userRepository.findUserById(id);
+    }
+
+    @Transactional
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    @Transactional
+    public void deleteUser(UUID id) {
+        userRepository.deleteUserById(id);
     }
 }
