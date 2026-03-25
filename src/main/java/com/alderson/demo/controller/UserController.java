@@ -1,21 +1,24 @@
 package com.alderson.demo.controller;
 
+import java.util.List;
 import java.util.UUID;
 
 import com.alderson.demo.model.User;
 import com.alderson.demo.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
 @RequestMapping("/users")
 public class UserController {
 
@@ -27,52 +30,26 @@ public class UserController {
     }
 
     @GetMapping
-    public String getAllUsers(Model model) {
-        model.addAttribute("usersList", userService.getAllUsers());
-        return "users";
+    public List<User> getAllUsers() {
+        return userService.getAllUsers();
     }
 
-    @GetMapping("/create")
-    public String showCreateUserForm(Model model) {
-        model.addAttribute("user", new User());
-        return "create";
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public User addUser(@Valid @RequestBody User user) {
+        return userService.addUser(user);
     }
 
-    @PostMapping("/create")
-    public String addUser(@Valid @ModelAttribute("user") User user) {
-        try {
-            userService.addUser(user);
-            return "redirect:/users";
-        } catch (Exception e) {
-            return "redirect:/users/email-error";
-        }
+    @PutMapping("/{id}")
+    public User editUser(@PathVariable UUID id, @Valid @RequestBody User user) {
+        user.setId(id);
+        return userService.updateUser(user);
     }
 
-    @GetMapping("/edit/{id}")
-    public String showEditUserForm(@PathVariable UUID id, Model model) {
-        User user = userService.findUserById(id);
-        model.addAttribute("user", user);
-        return "edit";
-    }
-
-    @PostMapping("/edit/{id}")
-    public String editUser(@PathVariable UUID id, @Valid @ModelAttribute("user") User user) {
-        try {
-            userService.addUser(user);
-            return "redirect:/users";
-        } catch (Exception e) {
-            return "redirect:/users/email-error";
-        }
-    }
-
-    @PostMapping("/delete")
-    public String deleteUser(@RequestParam UUID id) {
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteUser(@PathVariable UUID id) {
         userService.deleteUser(id);
-        return "redirect:/users";
     }
 
-    @GetMapping("/email-error")
-    public String emailError() {
-        return "email-error";
-    }
 }
